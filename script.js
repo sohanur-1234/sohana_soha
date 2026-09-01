@@ -15,6 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const secretNotesContainer = document.getElementById('secret-notes-container');
   const noteCards = document.querySelectorAll('.note-card');
   const burstZone = document.getElementById('heart-burst-zone');
+  const messengerBird = document.getElementById('messenger-bird');
+
+  // ==========================================
+  // 0. MESSENGER BIRD INTERACTION
+  // ==========================================
+  if (messengerBird) {
+    messengerBird.addEventListener('click', (e) => {
+      e.stopPropagation();
+      messengerBird.classList.add('spin-loop');
+      playHarpChime();
+      
+      const rect = messengerBird.getBoundingClientRect();
+      triggerHeartExplosion(rect.left + rect.width / 2, rect.top + rect.height / 2, 15);
+
+      setTimeout(() => {
+        messengerBird.classList.remove('spin-loop');
+      }, 750);
+    });
+  }
 
   // ==========================================
   // 1. WAX SEAL & ENVELOPE OPENING

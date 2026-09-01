@@ -793,3 +793,111 @@ body {
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   CARRIER MESSENGER BIRD ANIMATION
+   ========================================================================== */
+
+.messenger-bird-container {
+  position: fixed;
+  top: 14%;
+  left: -120px;
+  z-index: 50;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: birdFlyAcross 16s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.bird-flight-wrapper {
+  animation: birdUndulation 2.4s ease-in-out infinite alternate;
+}
+
+/* Wing flapping animations */
+.bird-wing-front {
+  transform-origin: 28px 24px;
+  animation: flapFrontWing 0.38s ease-in-out infinite alternate;
+}
+
+.bird-wing-back {
+  transform-origin: 28px 25px;
+  animation: flapBackWing 0.38s ease-in-out infinite alternate;
+}
+
+@keyframes flapFrontWing {
+  0% {
+    transform: rotate(0deg) scaleY(1);
+  }
+  100% {
+    transform: rotate(-50deg) scaleY(0.35);
+  }
+}
+
+@keyframes flapBackWing {
+  0% {
+    transform: rotate(0deg) scaleY(1);
+  }
+  100% {
+    transform: rotate(45deg) scaleY(0.4);
+  }
+}
+
+/* Natural flight path: Dipping, soaring, and crossing the screen */
+@keyframes birdFlyAcross {
+  0% {
+    transform: translate(-100px, 30px) scale(0.85);
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  20% {
+    transform: translate(22vw, -25px) scale(0.95);
+  }
+  45% {
+    transform: translate(48vw, 45px) scale(1);
+  }
+  70% {
+    transform: translate(75vw, -15px) scale(0.9);
+  }
+  94% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(115vw, 20px) scale(0.75);
+    opacity: 0;
+  }
+}
+
+@keyframes birdUndulation {
+  0% {
+    transform: translateY(0px) rotate(4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(-3deg);
+  }
+  100% {
+    transform: translateY(6px) rotate(2deg);
+  }
+}
+
+/* Click / Hover interactive barrel roll */
+.messenger-bird-container:hover {
+  filter: drop-shadow(0 6px 16px rgba(255, 215, 0, 0.6));
+}
+
+.messenger-bird-container.spin-loop {
+  animation-play-state: paused;
+}
+
+.messenger-bird-container.spin-loop .bird-flight-wrapper {
+  animation: birdSpin 0.7s ease-in-out;
+}
+
+@keyframes birdSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.3); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+

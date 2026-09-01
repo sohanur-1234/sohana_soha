@@ -571,6 +571,60 @@
       .letter-stamp { width: 65px; height: 75px; top: 20px; right: 15px; }
       .action-pill-btn { width: 100%; justify-content: center; }
     }
+
+    /* Messenger bird styles */
+    .messenger-bird-container {
+      position: fixed;
+      top: 14%;
+      left: -120px;
+      z-index: 50;
+      pointer-events: auto;
+      cursor: pointer;
+      animation: birdFlyAcross 16s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+      transition: transform 0.3s ease;
+    }
+    .bird-flight-wrapper {
+      animation: birdUndulation 2.4s ease-in-out infinite alternate;
+    }
+    .bird-wing-front {
+      transform-origin: 28px 24px;
+      animation: flapFrontWing 0.38s ease-in-out infinite alternate;
+    }
+    .bird-wing-back {
+      transform-origin: 28px 25px;
+      animation: flapBackWing 0.38s ease-in-out infinite alternate;
+    }
+    @keyframes flapFrontWing {
+      0% { transform: rotate(0deg) scaleY(1); }
+      100% { transform: rotate(-50deg) scaleY(0.35); }
+    }
+    @keyframes flapBackWing {
+      0% { transform: rotate(0deg) scaleY(1); }
+      100% { transform: rotate(45deg) scaleY(0.4); }
+    }
+    @keyframes birdFlyAcross {
+      0% { transform: translate(-100px, 30px) scale(0.85); opacity: 0; }
+      4% { opacity: 1; }
+      20% { transform: translate(22vw, -25px) scale(0.95); }
+      45% { transform: translate(48vw, 45px) scale(1); }
+      70% { transform: translate(75vw, -15px) scale(0.9); }
+      94% { opacity: 1; }
+      100% { transform: translate(115vw, 20px) scale(0.75); opacity: 0; }
+    }
+    @keyframes birdUndulation {
+      0% { transform: translateY(0px) rotate(4deg); }
+      50% { transform: translateY(-12px) rotate(-3deg); }
+      100% { transform: translateY(6px) rotate(2deg); }
+    }
+    .messenger-bird-container:hover { filter: drop-shadow(0 6px 16px rgba(255, 215, 0, 0.6)); }
+    .messenger-bird-container.spin-loop { animation-play-state: paused; }
+    .messenger-bird-container.spin-loop .bird-flight-wrapper { animation: birdSpin 0.7s ease-in-out; }
+    @keyframes birdSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.3); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -581,6 +635,24 @@
       <span class="music-icon">🎵</span>
       <span class="music-label">Play Music</span>
     </button>
+  </div>
+
+  <!-- Animated Messenger Carrier Bird Flying Across the Sky -->
+  <div class="messenger-bird-container" id="messenger-bird" title="Carrier Bird delivering letter to Ashu">
+    <div class="bird-flight-wrapper">
+      <svg class="carrier-bird-svg" viewBox="0 0 70 50" width="64" height="46">
+        <path class="bird-wing-back" d="M28 22 C18 6, 6 10, 2 18 C10 20, 20 22, 28 25 Z" fill="#e2e8f0"/>
+        <path class="bird-body" d="M20 25 C26 22, 38 22, 48 25 C54 27, 58 26, 56 23 C48 20, 40 19, 30 22 C24 18, 16 18, 8 23 C4 25, 2 28, 4 30 C10 28, 16 26, 20 25 Z" fill="#ffffff"/>
+        <path class="bird-wing-front" d="M26 23 C34 4, 46 6, 54 12 C46 17, 36 21, 28 24 Z" fill="#ffffff"/>
+        <circle cx="52" cy="23" r="1.2" fill="#2d1810"/>
+        <polygon points="55,23 61,25 55,27" fill="#fca311"/>
+        <g class="bird-envelope-carried" transform="translate(48, 25) scale(0.65)">
+          <rect x="0" y="0" width="16" height="11" rx="1.5" fill="#fcf9f2" stroke="#d4af37" stroke-width="0.8"/>
+          <polygon points="0,0 8,6 16,0" fill="#eedcc6" stroke="#d4af37" stroke-width="0.6"/>
+          <circle cx="8" cy="6" r="1.5" fill="#e63946"/>
+        </g>
+      </svg>
+    </div>
   </div>
 
   <div class="main-container">
@@ -767,6 +839,20 @@
       const secretNotesContainer = document.getElementById('secret-notes-container');
       const noteCards = document.querySelectorAll('.note-card');
       const burstZone = document.getElementById('heart-burst-zone');
+      const messengerBird = document.getElementById('messenger-bird');
+
+      if (messengerBird) {
+        messengerBird.addEventListener('click', (e) => {
+          e.stopPropagation();
+          messengerBird.classList.add('spin-loop');
+          playHarpChime();
+          const rect = messengerBird.getBoundingClientRect();
+          triggerHeartExplosion(rect.left + rect.width / 2, rect.top + rect.height / 2, 15);
+          setTimeout(() => {
+            messengerBird.classList.remove('spin-loop');
+          }, 750);
+        });
+      }
 
       let isOpening = false;
       function openLetter() {
