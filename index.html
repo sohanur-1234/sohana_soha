@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Letter for Rani 💌 | Happy Letter Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas for floating romantic ambient particles -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- Sound Toggle Control -->
+  <div class="music-controller">
+    <button id="music-btn" title="Toggle Romantic Melodies">
+      <span class="music-icon">🎵</span>
+      <span class="music-label">Play Music</span>
+    </button>
+  </div>
+
+  <div class="main-container">
+
+    <!-- ================= INITIAL ENVELOPE SCREEN ================= -->
+    <section id="envelope-section" class="screen-section active">
+      <div class="floating-intro">
+        <span class="tag-badge">✨ September 1 • World Letter Writing Day ✨</span>
+        <h1 class="intro-title">A Special Delivery Across the Miles</h1>
+        <p class="intro-sub">There's a letter waiting for you, Rani.</p>
+      </div>
+
+      <div class="envelope-wrapper" id="envelope-wrapper">
+        <div class="envelope" id="envelope">
+          <div class="envelope-back"></div>
+          <div class="envelope-letter-preview">
+            <p class="preview-text">Dearest Rani...</p>
+          </div>
+          <div class="envelope-front"></div>
+          <div class="envelope-top" id="envelope-top"></div>
+          <div class="wax-seal" id="wax-seal" title="Click to open letter">
+            <span class="seal-letter">R</span>
+            <div class="seal-sparkle"></div>
+          </div>
+        </div>
+      </div>
+      <p class="tap-hint">👆 Tap the wax seal to open your letter</p>
+    </section>
+
+    <!-- ================= OPENED LETTER CONTENT SECTION ================= -->
+    <section id="letter-section" class="screen-section hidden">
+      <div class="letter-page-wrapper">
+        
+        <!-- Header Ribbon -->
+        <div class="distance-ribbon">
+          <div class="location-dot">
+            <span class="dot-pulse"></span>
+            <span>Rahad</span>
+          </div>
+          <div class="connection-line">
+            <span class="plane-icon">✈️</span>
+            <span class="heart-pulse">❤️</span>
+          </div>
+          <div class="location-dot">
+            <span class="dot-pulse"></span>
+            <span>Rani</span>
+          </div>
+        </div>
+
+        <!-- The Vintage Paper Letter -->
+        <article class="parchment-letter">
+          <div class="letter-stamp">
+            <div class="stamp-inner">
+              <span>SPECIAL DELIVERY</span>
+              <strong>LETTER DAY</strong>
+              <small>SEPT 1</small>
+            </div>
+          </div>
+
+          <div class="letter-header">
+            <h2 class="salutation">Dearest Rani,</h2>
+            <div class="letter-date">World Letter Writing Day</div>
+          </div>
+
+          <div class="letter-body">
+            <p class="letter-p">
+              Today is <strong>Letter Writing Day</strong>, and when I thought about who deserves every single word of my heart, you were the only one on my mind.
+            </p>
+            
+            <p class="letter-p">
+              They say distance tests love, but with you, it has only shown me how limitless love can be. Even with all the miles, time zones, and screens between us, you feel closer to me than anything else in this world. You are in the quiet moments of my morning, in every melody I hear throughout the day, and in my last thought before I fall asleep.
+            </p>
+
+            <blockquote class="letter-quote">
+              "Distance is just a test to see how far love can travel."
+            </blockquote>
+
+            <p class="letter-p">
+              I miss your smile, the sound of your real laughter, and the simple warmth of your presence. But knowing that you are out there—loving me, supporting me, and sharing your heart with me—makes every single mile worth enduring.
+            </p>
+
+            <p class="letter-p">
+              This distance is only temporary, but what we have is forever. I count down the days until I don’t have to write these feelings down on paper or send them across a phone screen, but can finally whisper them to you in person.
+            </p>
+
+            <p class="letter-p">
+              Thank you for being my anchor, my favorite thought, and my queen. No matter how far apart we are today, my heart is right there beside you.
+            </p>
+          </div>
+
+          <div class="letter-footer">
+            <p class="sign-off-title">Happy Letter Day, my love.</p>
+            <p class="sign-off-note">Forever and always yours across every mile,</p>
+            <div class="signature">Your Love, Rahad ❤️</div>
+          </div>
+        </article>
+
+        <!-- Interactive Hug / Heart Burst Action -->
+        <div class="interactive-actions">
+          <button id="send-hug-btn" class="action-pill-btn primary">
+            <span class="btn-icon">💖</span> Send a Virtual Hug & Kiss
+          </button>
+          <button id="toggle-reasons-btn" class="action-pill-btn secondary">
+            <span class="btn-icon">💌</span> "Open When..." Secret Notes
+          </button>
+        </div>
+
+        <!-- ================= SECRET "OPEN WHEN" NOTES ================= -->
+        <div id="secret-notes-container" class="secret-notes-container">
+          <h3 class="section-heading">Open Whenever You Need Me 🕊️</h3>
+          <div class="notes-grid">
+            
+            <div class="note-card" data-note="1">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">🥺</span>
+                  <h4>Open when you miss me</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>Close your eyes, take a deep breath, and place your hand on your heart. Hear that beat? That’s where I live. I’m missing you just as much right now, Rani.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-card" data-note="2">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">🌙</span>
+                  <h4>Open when you can't sleep</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>Look up at the moon tonight. It's the exact same moon shining down over me. We are looking at the same sky together.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-card" data-note="3">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">🌧️</span>
+                  <h4>Open on a difficult day</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>You are stronger and more capable than you know, but you don't have to carry the world alone. I'm always cheering for you, even from afar.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-card" data-note="4">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">✨</span>
+                  <h4>Open when you need a smile</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>Fun fact: Just thinking about your smile instantly makes my entire day 1000x brighter. You are my sunshine!</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= REUNION COUNTDOWN / PROMISE ================= -->
+        <div class="promise-card">
+          <div class="promise-icon">💍</div>
+          <h3>Our Long-Distance Promise</h3>
+          <p>Distance means so little when someone means so much. Miles cannot diminish what we share.</p>
+          <div class="love-counter">
+            <span class="counter-badge">Distance: Many Miles</span>
+            <span class="divider">•</span>
+            <span class="counter-badge highlight">Heart Distance: 0.00 cm</span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+          <p>Handcrafted with endless love by Rahad for Rani on Letter Writing Day 💌</p>
+        </footer>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Floating Heart Bursts Container -->
+  <div id="heart-burst-zone"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

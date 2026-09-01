@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Letter for Rani 💌 | From Rahad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-rose: #e63946;
+      --deep-wine: #2b0914;
+      --bg-gradient: radial-gradient(circle at center, #2e0815 0%, #120208 100%);
+      --parchment-bg: #fcf9f2;
+      --parchment-border: #eedcc6;
+      --text-dark: #2d1810;
+      --text-muted: #6e5449;
+      --gold-accent: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.4);
+      --wax-red: #9e1b26;
+      --wax-dark: #6e0d16;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --shadow-deep: 0 20px 50px rgba(0, 0, 0, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.07);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    #ambient-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .music-controller {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 100;
+    }
+    #music-btn {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    #music-btn:hover {
+      background: rgba(230, 57, 70, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+    }
+    #music-btn.playing {
+      background: rgba(230, 57, 70, 0.8);
+      box-shadow: 0 0 20px rgba(230, 57, 70, 0.6);
+      animation: pulseButton 2s infinite;
+    }
+    @keyframes pulseButton {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+    .main-container {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .screen-section {
+      width: 100%;
+      max-width: 780px;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .screen-section.hidden {
+      display: none;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .screen-section.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .floating-intro {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInDown 1.2s ease;
+    }
+    .tag-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: #ffd700;
+      font-size: 0.85rem;
+      padding: 6px 16px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .intro-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 30%, #ffccd5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .intro-sub {
+      color: #fca311;
+      font-size: 1.15rem;
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .envelope-wrapper {
+      perspective: 1000px;
+      margin: 20px 0;
+      cursor: pointer;
+    }
+    .envelope {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      background: #d4a373;
+      border-radius: 8px;
+      box-shadow: var(--shadow-deep);
+      transition: transform 0.4s ease;
+    }
+    .envelope:hover { transform: translateY(-8px) scale(1.02); }
+    .envelope-back {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #bc8a5f;
+      border-radius: 8px;
+      z-index: 1;
+    }
+    .envelope-letter-preview {
+      position: absolute;
+      top: 8px; left: 15px;
+      width: 290px; height: 180px;
+      background: #fffdfa;
+      border-radius: 4px;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.8s ease;
+    }
+    .preview-text {
+      font-family: 'Sacramento', cursive;
+      font-size: 1.8rem;
+      color: #8b0000;
+    }
+    .envelope-front {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 0;
+      border-left: 160px solid #cc9566;
+      border-right: 160px solid #cc9566;
+      border-bottom: 110px solid #b87d4e;
+      border-top: 110px solid transparent;
+      border-radius: 0 0 8px 8px;
+      z-index: 3;
+    }
+    .envelope-top {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 120px solid #dd9e6d;
+      transform-origin: top;
+      transition: transform 0.6s 0.2s ease;
+      z-index: 4;
+    }
+    .wax-seal {
+      position: absolute;
+      top: 95px; left: 50%;
+      transform: translateX(-50%);
+      width: 58px; height: 58px;
+      background: radial-gradient(circle at 35% 35%, #d90429, #7a0010);
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .wax-seal:hover {
+      transform: translateX(-50%) scale(1.15);
+      box-shadow: 0 0 20px rgba(230, 57, 70, 0.8);
+    }
+    .seal-letter {
+      font-family: 'Alex Brush', cursive;
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #f7d6a5;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+      user-select: none;
+    }
+    .envelope.open .envelope-top {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+    .envelope.open .wax-seal {
+      transform: translateX(-50%) scale(0);
+      opacity: 0;
+    }
+    .envelope.open .envelope-letter-preview {
+      transform: translateY(-100px);
+    }
+    .tap-hint {
+      margin-top: 30px;
+      font-size: 0.95rem;
+      color: #ffccd5;
+      letter-spacing: 0.5px;
+      animation: pulseHint 2s infinite ease-in-out;
+    }
+    @keyframes pulseHint {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-4px); }
+    }
+    .letter-page-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+    }
+    .distance-ribbon {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50px;
+      padding: 12px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-soft);
+    }
+    .location-dot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #ffcad4;
+    }
+    .dot-pulse {
+      width: 10px; height: 10px;
+      background: #e63946;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #e63946;
+      animation: radarPulse 1.5s infinite;
+    }
+    @keyframes radarPulse {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+    .connection-line {
+      flex-grow: 1;
+      margin: 0 20px;
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .heart-pulse {
+      position: absolute;
+      top: -12px;
+      font-size: 1.1rem;
+      animation: travelHeart 3s infinite ease-in-out alternate;
+    }
+    @keyframes travelHeart {
+      0% { transform: translateX(-80px); }
+      100% { transform: translateX(80px); }
+    }
+    .parchment-letter {
+      background: var(--parchment-bg);
+      color: var(--text-dark);
+      padding: 55px 50px;
+      border-radius: 12px;
+      position: relative;
+      box-shadow: var(--shadow-deep), 0 0 40px rgba(212, 175, 55, 0.2);
+      border: 1px solid var(--parchment-border);
+      background-image: radial-gradient(#ece1cf 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .parchment-letter::before {
+      content: '';
+      position: absolute;
+      top: 12px; bottom: 12px; left: 12px; right: 12px;
+      border: 1px solid rgba(139, 94, 60, 0.15);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+    .letter-stamp {
+      position: absolute;
+      top: 30px; right: 35px;
+      width: 80px; height: 90px;
+      border: 2px dashed #b08968;
+      padding: 4px;
+      transform: rotate(6deg);
+      opacity: 0.85;
+    }
+    .stamp-inner {
+      width: 100%; height: 100%;
+      background: rgba(176, 137, 104, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      text-align: center;
+      color: #7f4f24;
+      line-height: 1.2;
+    }
+    .stamp-inner strong {
+      font-size: 0.75rem;
+      margin: 2px 0;
+      color: #9e1b26;
+    }
+    .letter-header { margin-bottom: 30px; }
+    .salutation {
+      font-family: 'Alex Brush', cursive;
+      font-size: 3.5rem;
+      color: #8b1e28;
+      font-weight: normal;
+      line-height: 1;
+    }
+    .letter-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+    .letter-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      line-height: 1.85;
+      color: #2b170e;
+    }
+    .letter-p {
+      margin-bottom: 22px;
+      text-align: justify;
+    }
+    .letter-quote {
+      margin: 30px 0;
+      padding: 16px 24px;
+      border-left: 3px solid #8b1e28;
+      background: rgba(139, 30, 40, 0.04);
+      font-style: italic;
+      font-size: 1.4rem;
+      color: #8b1e28;
+      border-radius: 0 8px 8px 0;
+    }
+    .letter-footer {
+      margin-top: 40px;
+      padding-top: 25px;
+      border-top: 1px dashed rgba(139, 94, 60, 0.3);
+    }
+    .sign-off-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #8b1e28;
+    }
+    .sign-off-note {
+      font-size: 1.15rem;
+      font-style: italic;
+      margin-top: 4px;
+      color: var(--text-muted);
+    }
+    .signature {
+      font-family: 'Sacramento', cursive;
+      font-size: 2.8rem;
+      color: #8b1e28;
+      margin-top: 10px;
+    }
+    .interactive-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .action-pill-btn {
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      border: none;
+      box-shadow: var(--shadow-soft);
+    }
+    .action-pill-btn.primary {
+      background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+      color: #fff;
+    }
+    .action-pill-btn.primary:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(230, 57, 70, 0.5);
+    }
+    .action-pill-btn.secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+    }
+    .action-pill-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+    .secret-notes-container {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      color: #ffccd5;
+    }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .note-card {
+      height: 180px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 14px;
+    }
+    .note-card.flipped .card-inner { transform: rotateY(180deg); }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%; height: 100%;
+      backface-visibility: hidden;
+      border-radius: 14px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .card-front {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: var(--shadow-soft);
+      color: #fff;
+    }
+    .card-icon { font-size: 2.2rem; margin-bottom: 10px; }
+    .card-front h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .tap-card-prompt { font-size: 0.8rem; color: #fca311; text-transform: uppercase; letter-spacing: 0.8px; }
+    .card-back {
+      background: #fdfaf6;
+      color: #2b170e;
+      transform: rotateY(180deg);
+      border: 1px solid #eedcc6;
+      box-shadow: var(--shadow-soft);
+    }
+    .card-back p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+    .promise-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 35px 30px;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+    }
+    .promise-icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .promise-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      color: #ffd700;
+      margin-bottom: 10px;
+    }
+    .promise-card p {
+      color: #f0e6e8;
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+    }
+    .love-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.95rem;
+    }
+    .counter-badge.highlight { color: #ff758f; font-weight: 700; }
+    .divider { color: rgba(255, 255, 255, 0.3); }
+    .site-footer {
+      text-align: center;
+      padding: 20px 0;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+    #heart-burst-zone {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .floating-heart-burst {
+      position: absolute;
+      pointer-events: none;
+      animation: floatUpBurst 2.5s ease-out forwards;
+    }
+    @keyframes floatUpBurst {
+      0% { opacity: 1; transform: translateY(0) scale(0.5) rotate(0deg); }
+      50% { opacity: 0.9; }
+      100% { opacity: 0; transform: translateY(-280px) scale(1.6) rotate(35deg); }
+    }
+    @media (max-width: 600px) {
+      .intro-title { font-size: 2.1rem; }
+      .envelope { width: 280px; height: 190px; }
+      .envelope-letter-preview { width: 250px; height: 155px; }
+      .envelope-front { border-left: 140px solid #cc9566; border-right: 140px solid #cc9566; border-bottom: 95px solid #b87d4e; border-top: 95px solid transparent; }
+      .envelope-top { border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 105px solid #dd9e6d; }
+      .parchment-letter { padding: 35px 22px; }
+      .salutation { font-size: 2.8rem; }
+      .letter-body { font-size: 1.18rem; line-height: 1.7; }
+      .letter-stamp { width: 65px; height: 75px; top: 20px; right: 15px; }
+      .action-pill-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ambient-canvas"></canvas>
+
+  <div class="music-controller">
+    <button id="music-btn" title="Toggle Romantic Melodies">
+      <span class="music-icon">🎵</span>
+      <span class="music-label">Play Music</span>
+    </button>
+  </div>
+
+  <div class="main-container">
+    <!-- ENVELOPE SCREEN -->
+    <section id="envelope-section" class="screen-section active">
+      <div class="floating-intro">
+        <span class="tag-badge">✨ September 1 • World Letter Writing Day ✨</span>
+        <h1 class="intro-title">A Special Delivery Across the Miles</h1>
+        <p class="intro-sub">There's a letter waiting for you, Rani.</p>
+      </div>
+
+      <div class="envelope-wrapper" id="envelope-wrapper">
+        <div class="envelope" id="envelope">
+          <div class="envelope-back"></div>
+          <div class="envelope-letter-preview">
+            <p class="preview-text">Dearest Rani...</p>
+          </div>
+          <div class="envelope-front"></div>
+          <div class="envelope-top" id="envelope-top"></div>
+          <div class="wax-seal" id="wax-seal" title="Click to open letter">
+            <span class="seal-letter">R</span>
+          </div>
+        </div>
+      </div>
+      <p class="tap-hint">👆 Tap the wax seal to open your letter</p>
+    </section>
+
+    <!-- LETTER SECTION -->
+    <section id="letter-section" class="screen-section hidden">
+      <div class="letter-page-wrapper">
+        
+        <div class="distance-ribbon">
+          <div class="location-dot">
+            <span class="dot-pulse"></span>
+            <span>Rahad</span>
+          </div>
+          <div class="connection-line">
+            <span class="plane-icon">✈️</span>
+            <span class="heart-pulse">❤️</span>
+          </div>
+          <div class="location-dot">
+            <span class="dot-pulse"></span>
+            <span>Rani</span>
+          </div>
+        </div>
+
+        <article class="parchment-letter">
+          <div class="letter-stamp">
+            <div class="stamp-inner">
+              <span>SPECIAL DELIVERY</span>
+              <strong>LETTER DAY</strong>
+              <small>SEPT 1</small>
+            </div>
+          </div>
+
+          <div class="letter-header">
+            <h2 class="salutation">Dearest Rani,</h2>
+            <div class="letter-date">World Letter Writing Day</div>
+          </div>
+
+          <div class="letter-body">
+            <p class="letter-p">
+              Today is <strong>Letter Writing Day</strong>, and when I thought about who deserves every single word of my heart, you were the only one on my mind.
+            </p>
+            
+            <p class="letter-p">
+              They say distance tests love, but with you, it has only shown me how limitless love can be. Even with all the miles, time zones, and screens between us, you feel closer to me than anything else in this world. You are in the quiet moments of my morning, in every melody I hear throughout the day, and in my last thought before I fall asleep.
+            </p>
+
+            <blockquote class="letter-quote">
+              "Distance is just a test to see how far love can travel."
+            </blockquote>
+
+            <p class="letter-p">
+              I miss your smile, the sound of your real laughter, and the simple warmth of your presence. But knowing that you are out there—loving me, supporting me, and sharing your heart with me—makes every single mile worth enduring.
+            </p>
+
+            <p class="letter-p">
+              This distance is only temporary, but what we have is forever. I count down the days until I don’t have to write these feelings down on paper or send them across a phone screen, but can finally whisper them to you in person.
+            </p>
+
+            <p class="letter-p">
+              Thank you for being my anchor, my favorite thought, and my queen. No matter how far apart we are today, my heart is right there beside you.
+            </p>
+          </div>
+
+          <div class="letter-footer">
+            <p class="sign-off-title">Happy Letter Day, my love.</p>
+            <p class="sign-off-note">Forever and always yours across every mile,</p>
+            <div class="signature">Your Love, Rahad ❤️</div>
+          </div>
+        </article>
+
+        <div class="interactive-actions">
+          <button id="send-hug-btn" class="action-pill-btn primary">
+            <span class="btn-icon">💖</span> Send a Virtual Hug & Kiss
+          </button>
+          <button id="toggle-reasons-btn" class="action-pill-btn secondary">
+            <span class="btn-icon">💌</span> "Open When..." Secret Notes
+          </button>
+        </div>
+
+        <div id="secret-notes-container" class="secret-notes-container">
+          <h3 class="section-heading">Open Whenever You Need Me 🕊️</h3>
+          <div class="notes-grid">
+            <div class="note-card" data-note="1">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">🥺</span>
+                  <h4>Open when you miss me</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>Close your eyes, take a deep breath, and place your hand on your heart. Hear that beat? That’s where I live. I’m missing you just as much right now, Rani.</p>
+                </div>
+              </div>
+            </div>
+            <div class="note-card" data-note="2">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">🌙</span>
+                  <h4>Open when you can't sleep</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>Look up at the moon tonight. It's the exact same moon shining down over me. We are looking at the same sky together.</p>
+                </div>
+              </div>
+            </div>
+            <div class="note-card" data-note="3">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">🌧️</span>
+                  <h4>Open on a difficult day</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>You are stronger and more capable than you know, but you don't have to carry the world alone. I'm always cheering for you, even from afar.</p>
+                </div>
+              </div>
+            </div>
+            <div class="note-card" data-note="4">
+              <div class="card-inner">
+                <div class="card-front">
+                  <span class="card-icon">✨</span>
+                  <h4>Open when you need a smile</h4>
+                  <span class="tap-card-prompt">Tap to unfold</span>
+                </div>
+                <div class="card-back">
+                  <p>Fun fact: Just thinking about your smile instantly makes my entire day 1000x brighter. You are my sunshine!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="promise-card">
+          <div class="promise-icon">💍</div>
+          <h3>Our Long-Distance Promise</h3>
+          <p>Distance means so little when someone means so much. Miles cannot diminish what we share.</p>
+          <div class="love-counter">
+            <span class="counter-badge">Distance: Many Miles</span>
+            <span class="divider">•</span>
+            <span class="counter-badge highlight">Heart Distance: 0.00 cm</span>
+          </div>
+        </div>
+
+        <footer class="site-footer">
+          <p>Handcrafted with endless love by Rahad for Rani on Letter Writing Day 💌</p>
+        </footer>
+
+      </div>
+    </section>
+  </div>
+
+  <div id="heart-burst-zone"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const envelopeWrapper = document.getElementById('envelope-wrapper');
+      const waxSeal = document.getElementById('wax-seal');
+      const envelope = document.getElementById('envelope');
+      const envelopeSection = document.getElementById('envelope-section');
+      const letterSection = document.getElementById('letter-section');
+      const musicBtn = document.getElementById('music-btn');
+      const sendHugBtn = document.getElementById('send-hug-btn');
+      const toggleReasonsBtn = document.getElementById('toggle-reasons-btn');
+      const secretNotesContainer = document.getElementById('secret-notes-container');
+      const noteCards = document.querySelectorAll('.note-card');
+      const burstZone = document.getElementById('heart-burst-zone');
+
+      let isOpening = false;
+      function openLetter() {
+        if (isOpening) return;
+        isOpening = true;
+        envelope.classList.add('open');
+        triggerHeartExplosion(window.innerWidth / 2, window.innerHeight / 2, 25);
+        playSealBreakChime();
+        if (!isPlayingMusic) toggleMusic();
+
+        setTimeout(() => {
+          envelopeSection.style.opacity = '0';
+          envelopeSection.style.transform = 'translateY(-30px)';
+          setTimeout(() => {
+            envelopeSection.classList.remove('active');
+            envelopeSection.classList.add('hidden');
+            letterSection.classList.remove('hidden');
+            letterSection.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            triggerHeartExplosion(window.innerWidth / 2, 200, 30);
+          }, 700);
+        }, 1200);
+      }
+
+      if (waxSeal) waxSeal.addEventListener('click', openLetter);
+      if (envelopeWrapper) envelopeWrapper.addEventListener('click', openLetter);
+
+      noteCards.forEach(card => {
+        card.addEventListener('click', () => {
+          card.classList.toggle('flipped');
+          playSoftClickTone();
+        });
+      });
+
+      if (toggleReasonsBtn) {
+        toggleReasonsBtn.addEventListener('click', () => {
+          secretNotesContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      if (sendHugBtn) {
+        sendHugBtn.addEventListener('click', () => {
+          const rect = sendHugBtn.getBoundingClientRect();
+          triggerHeartExplosion(rect.left + rect.width / 2, rect.top, 35);
+          playHarpChime();
+          sendHugBtn.innerHTML = '<span class="btn-icon">💖</span> Hug & Kiss Sent to Rani!';
+          setTimeout(() => {
+            sendHugBtn.innerHTML = '<span class="btn-icon">💖</span> Send Another Hug & Kiss';
+          }, 2500);
+        });
+      }
+
+      function triggerHeartExplosion(originX, originY, count = 20) {
+        const emojis = ['💖', '❤️', '💕', '✨', '💌', '🌹', '🥰', '💗'];
+        for (let i = 0; i < count; i++) {
+          const heart = document.createElement('div');
+          heart.className = 'floating-heart-burst';
+          heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          const spreadX = (Math.random() - 0.5) * 320;
+          const spreadY = (Math.random() - 0.5) * 100;
+          const size = Math.random() * 1.5 + 1.2;
+          const duration = Math.random() * 1.5 + 1.5;
+          heart.style.left = `${originX + spreadX}px`;
+          heart.style.top = `${originY + spreadY}px`;
+          heart.style.fontSize = `${size}rem`;
+          heart.style.animationDuration = `${duration}s`;
+          burstZone.appendChild(heart);
+          setTimeout(() => heart.remove(), duration * 1000);
+        }
+      }
+
+      let audioCtx = null;
+      let isPlayingMusic = false;
+      let musicInterval = null;
+
+      function initAudioContext() {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      }
+
+      const romanticMelody = [
+        { freq: 261.63, delay: 0 },
+        { freq: 329.63, delay: 400 },
+        { freq: 392.00, delay: 800 },
+        { freq: 523.25, delay: 1200 },
+        { freq: 440.00, delay: 1800 },
+        { freq: 349.23, delay: 2400 },
+        { freq: 392.00, delay: 3000 },
+        { freq: 493.88, delay: 3600 },
+        { freq: 523.25, delay: 4200 },
+        { freq: 392.00, delay: 4800 },
+      ];
+
+      function playTone(freq, type = 'sine', duration = 1.6, volume = 0.08) {
+        if (!audioCtx) return;
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0, audioCtx.currentTime);
+          gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      function playSealBreakChime() {
+        initAudioContext();
+        playTone(523.25, 'sine', 0.8, 0.1);
+        setTimeout(() => playTone(659.25, 'sine', 1.0, 0.1), 150);
+        setTimeout(() => playTone(783.99, 'sine', 1.4, 0.12), 300);
+      }
+
+      function playSoftClickTone() {
+        initAudioContext();
+        playTone(440, 'triangle', 0.25, 0.04);
+      }
+
+      function playHarpChime() {
+        initAudioContext();
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          setTimeout(() => playTone(freq, 'sine', 1.2, 0.08), idx * 80);
+        });
+      }
+
+      function playMelodyLoop() {
+        romanticMelody.forEach(note => {
+          setTimeout(() => {
+            if (isPlayingMusic) playTone(note.freq, 'sine', 2.2, 0.05);
+          }, note.delay);
+        });
+      }
+
+      function toggleMusic() {
+        initAudioContext();
+        isPlayingMusic = !isPlayingMusic;
+        if (isPlayingMusic) {
+          musicBtn.classList.add('playing');
+          musicBtn.querySelector('.music-label').textContent = 'Music Playing 🎶';
+          playMelodyLoop();
+          musicInterval = setInterval(playMelodyLoop, 5600);
+        } else {
+          musicBtn.classList.remove('playing');
+          musicBtn.querySelector('.music-label').textContent = 'Play Music';
+          clearInterval(musicInterval);
+        }
+      }
+
+      if (musicBtn) musicBtn.addEventListener('click', toggleMusic);
+
+      const canvas = document.getElementById('ambient-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      class Particle {
+        constructor() { this.reset(); }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 3 + 1;
+          this.speedY = Math.random() * 0.6 + 0.2;
+          this.speedX = (Math.random() - 0.5) * 0.4;
+          this.opacity = Math.random() * 0.6 + 0.2;
+          this.color = Math.random() > 0.4 ? '#ffccd5' : '#ffd700';
+        }
+        update() {
+          this.y -= this.speedY;
+          this.x += this.speedX;
+          if (this.y < 0) {
+            this.y = canvas.height + 10;
+            this.x = Math.random() * canvas.width;
+          }
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.globalAlpha = this.opacity;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = this.color;
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
+      }
+
+      for (let i = 0; i < 40; i++) particles.push(new Particle());
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    });
+  </script>
+</body>
+</html>
