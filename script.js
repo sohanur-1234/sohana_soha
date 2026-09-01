@@ -86,15 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
       triggerHeartExplosion(x, y, 35);
       playHarpChime();
 
-      sendHugBtn.innerHTML = '<span class="btn-icon">🤗</span> Hug & High-Five Sent to Rani!';
+      sendHugBtn.innerHTML = '<span class="btn-icon">🤝</span> Warm Regards Sent to Ashu!';
       setTimeout(() => {
-        sendHugBtn.innerHTML = '<span class="btn-icon">🤗</span> Send Another Hug & High-Five';
+        sendHugBtn.innerHTML = '<span class="btn-icon">🤝</span> Send Regards Again';
       }, 2500);
     });
   }
 
   function triggerHeartExplosion(originX, originY, count = 20) {
-    const emojis = ['✨', '🤗', '💫', '💛', '💌', '🌸', '⭐', '🎉'];
+    const emojis = ['✨', '⭐', '✉️', '🤝', '☕', '💡', '🎉', '🌟'];
 
     for (let i = 0; i < count; i++) {
       const heart = document.createElement('div');
